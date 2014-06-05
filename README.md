@@ -4,8 +4,7 @@ Usage example
     <?php
     require_once 'vendor/autoload.php';
 
-    use mac\bit\BitField;
-    use mac\bit\BitParam;
+    use mac\bit\Bit;
 
     class User
     {
@@ -14,46 +13,48 @@ Usage example
         const ADMIN = 2;
         const ALL = 3;
 
-        use BitField;
+        use Bit;
+
+        protected $flags;
 
         public function setRegistered()
         {
-            $this->setFlag(self::REGISTERED);
+            $this->setFlag(self::REGISTERED, $this->flags);
         }
 
         public function setAdmin()
         {
-            $this->setFlag(self::ADMIN);
+            $this->setFlag(self::ADMIN, $this->flags);
         }
 
         public function unsetRegistered()
         {
-            $this->unsetFlag(self::REGISTERED);
+            $this->unsetFlag(self::REGISTERED, $this->flags);
         }
 
         public function unsetAdmin()
         {
-            $this->unsetFlag(self::ADMIN);
+            $this->unsetFlag(self::ADMIN, $this->flags);
         }
 
         public function toggleRegistered()
         {
-            $this->toggleFlag(self::REGISTERED);
+            $this->toggleFlag(self::REGISTERED, $this->flags);
         }
 
         public function toggleAdmin()
         {
-            $this->toggleFlag(self::ADMIN);
+            $this->toggleFlag(self::ADMIN, $this->flags);
         }
 
         public function isRegistered()
         {
-            return $this->isFlagSet(self::REGISTERED);
+            return $this->isFlagSet(self::REGISTERED, $this->flags);
         }
 
         public function isAdmin()
         {
-            return $this->isFlagSet(self::ADMIN);
+            return $this->isFlagSet(self::ADMIN, $this->flags);
         }
 
         public function __toString() {
@@ -64,28 +65,7 @@ Usage example
         }
     }
 
-    class UserRepository
-    {
-        use BitParam;
-
-        public function create($flags = User::NONE)
-        {
-            $user = new User();
-
-            if (self::isBitSet(User::REGISTERED, $flags)) {
-                $user->setRegistered();
-            }
-
-            if (self::isBitSet(User::ADMIN, $flags)) {
-                $user->setAdmin();
-            }
-
-            return $user;
-        }
-    }
-
-    $repository = new UserRepository();
-    $user = $repository->create(User::ALL & ~User::ADMIN);
+    $user = new User();
 
     $user->setRegistered();
 
