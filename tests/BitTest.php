@@ -3,7 +3,7 @@ namespace mac\bit\Tests;
 
 use PHPUnit_Framework_TestCase;
 
-class BitFieldTest extends PHPUnit_Framework_TestCase
+class BitTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var User
@@ -62,5 +62,12 @@ class BitFieldTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($this->user->isRegistered());
         $this->assertTrue($this->user->isActive());
         $this->assertTrue($this->user->isMember());
+    }
+
+    public function testCheckIsFlagSet()
+    {
+        $this->user->unsetActive();
+        $this->assertTrue($this->user->isChecked(User::ADMIN | User::REGISTERED));
+        $this->assertTrue($this->user->isChecked(User::ALL & ~User::ACTIVE));
     }
 }
